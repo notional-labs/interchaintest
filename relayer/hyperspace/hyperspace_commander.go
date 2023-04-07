@@ -18,9 +18,9 @@ import (
 
 // hyperspaceCommander satisfies relayer.RelayerCommander.
 type hyperspaceCommander struct {
-	log              *zap.Logger
-	paths            map[string]*pathConfiguration
-	extraStartFlags  []string
+	log             *zap.Logger
+	paths           map[string]*pathConfiguration
+	extraStartFlags []string
 }
 
 // pathConfiguration represents the concept of a "path" which is implemented at the interchain test level rather
