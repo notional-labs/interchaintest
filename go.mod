@@ -3,16 +3,17 @@ module github.com/strangelove-ventures/interchaintest/v7
 go 1.19
 
 require (
+	github.com/cometbft/cometbft v0.37.0
 	github.com/99designs/keyring v1.2.1
 	github.com/BurntSushi/toml v1.2.0
 	github.com/ChainSafe/go-schnorrkel/1 v0.0.0-00010101000000-000000000000
 	github.com/StirlingMarketingGroup/go-namecase v1.0.0
 	github.com/atotto/clipboard v0.1.4
 	github.com/avast/retry-go/v4 v4.0.4
-	github.com/cosmos/cosmos-sdk v0.47.0-rc2
+	github.com/cosmos/cosmos-sdk v0.47.1
 	github.com/cosmos/go-bip39 v1.0.0
 	github.com/cosmos/gogoproto v1.4.4
-	github.com/cosmos/ibc-go/v7 v7.0.0-rc0
+	github.com/cosmos/ibc-go/v7 v7.0.0
 	github.com/davecgh/go-spew v1.1.1
 	github.com/decred/dcrd/dcrec/secp256k1/v2 v2.0.0
 	github.com/docker/docker v20.10.17+incompatible
@@ -29,7 +30,6 @@ require (
 	github.com/rivo/tview v0.0.0-20220307222120-9994674d60a8
 	github.com/spf13/cobra v1.6.1
 	github.com/stretchr/testify v1.8.1
-	github.com/tendermint/tendermint v0.37.0-rc2
 	github.com/tyler-smith/go-bip32 v1.0.0
 	github.com/tyler-smith/go-bip39 v1.0.1-0.20181017060643-dbb3b84ba2ef
 	go.uber.org/multierr v1.8.0
