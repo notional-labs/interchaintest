@@ -813,7 +813,7 @@ func (tn *ChainNode) StoreClientContract(ctx context.Context, keyName string, fi
 
 // QueryClientContractCode performs a query with the contract codeHash as the input and code as the output
 func (tn *ChainNode) QueryClientContractCode(ctx context.Context, codeHash string, response any) error {
-	stdout, _, err := tn.ExecQuery(ctx, "ibc-wasm", "code", codeHash)
+	stdout, _, err := tn.ExecQuery(ctx, "08-wasm", "code", codeHash)
 	if err != nil {
 		return err
 	}

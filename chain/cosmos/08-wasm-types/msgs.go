@@ -5,14 +5,14 @@ import (
 )
 
 var (
-	_ sdk.Msg = &MsgStoreCode{}
+	_ sdk.Msg = &MsgPushNewWasmCode{}
 )
 
-func (m MsgStoreCode) ValidateBasic() error {
+func (m MsgPushNewWasmCode) ValidateBasic() error {
 	return nil
 }
 
-func (m MsgStoreCode) GetSigners() []sdk.AccAddress {
+func (m MsgPushNewWasmCode) GetSigners() []sdk.AccAddress {
 	signer, err := sdk.AccAddressFromBech32(m.Signer)
 	if err != nil {
 		panic(err)
