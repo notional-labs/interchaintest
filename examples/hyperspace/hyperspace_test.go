@@ -228,19 +228,6 @@ func TestHyperspace(t *testing.T) {
 	err = testutil.WaitForBlocks(ctx, 1, cosmosChain, polkadotChain)
 	require.NoError(t, err)
 
-	// Get channels - Query channels was removed
-	/*cosmosChannelOutput, err := r.GetChannels(ctx, eRep, cosmosChain.Config().ChainID)
-	require.NoError(t, err)
-	require.Equal(t, len(cosmosChannelOutput), 1)
-	require.Equal(t, cosmosChannelOutput[0].ChannelID, "channel-0")
-	require.Equal(t, cosmosChannelOutput[0].PortID, "transfer")
-
-	polkadotChannelOutput, err := r.GetChannels(ctx, eRep, polkadotChain.Config().ChainID)
-	require.NoError(t, err)
-	require.Equal(t, len(polkadotChannelOutput), 1)
-	require.Equal(t, polkadotChannelOutput[0].ChannelID, "channel-0")
-	require.Equal(t, polkadotChannelOutput[0].PortID, "transfer")*/
-
 	// Start relayer
 	r.StartRelayer(ctx, eRep, pathName)
 	require.NoError(t, err)
@@ -302,26 +289,22 @@ func TestHyperspace(t *testing.T) {
 	cosmosUserStakeBal, err := cosmosChain.GetBalance(ctx, cosmosUser.FormattedAddress(), cosmosChain.Config().Denom)
 	require.NoError(t, err)
 	require.Equal(t, finalStakeBal, cosmosUserStakeBal)
-	
+
 	// Verify cosmos user's final "unit" balance
 	unitDenomTrace := transfertypes.ParseDenomTrace(transfertypes.GetPrefixedDenom("transfer", "channel-0", "UNIT"))
 	cosmosUserUnitBal, err := cosmosChain.GetBalance(ctx, cosmosUser.FormattedAddress(), unitDenomTrace.IBCDenom())
 	require.NoError(t, err)
 	require.Equal(t, amountUnits, cosmosUserUnitBal)
-	
+
 	// Verify parachain user's final "unit" balance (will be less than expected due gas costs for stake tx)
 	parachainUserUnits, err := polkadotChain.GetIbcBalance(ctx, string(polkadotUser.Address()), 1)
 	require.NoError(t, err)
 	require.LessOrEqual(t, parachainUserUnits.Amount.Int64(), fundAmount, "parachain user's final unit amount not expected")
-	
-	// Verify parachain user's final "stake" balance 
+
+	// Verify parachain user's final "stake" balance
 	parachainUserStake, err = polkadotChain.GetIbcBalance(ctx, string(polkadotUser.Address()), 2)
 	require.NoError(t, err)
 	require.Equal(t, amountToSend-amountToReflect, parachainUserStake.Amount.Int64(), "parachain user's final stake amount not expected")
-
-	fmt.Println("********************************")
-	fmt.Println("********* Test passed **********")
-	fmt.Println("********************************")
 }
 
 type GetCodeQueryMsgResponse struct {
