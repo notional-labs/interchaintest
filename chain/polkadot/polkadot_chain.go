@@ -29,7 +29,7 @@ import (
 )
 
 // Increase polkadot scaled wallet amounts relative to cosmos
-const polkadotScaling = int64(1_000_000)
+const polkadotScaling = int64(1_000)
 
 // PolkadotChain implements the ibc.Chain interface for substrate chains.
 type PolkadotChain struct {

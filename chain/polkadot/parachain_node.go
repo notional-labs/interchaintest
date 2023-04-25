@@ -22,7 +22,7 @@ import (
 )
 
 // Increase parachain scaled wallet amounts relative to cosmos
-const parachainScaling = int64(1_000_000)
+const parachainScaling = int64(1_000)
 
 // ParachainNode defines the properties required for running a polkadot parachain node.
 type ParachainNode struct {
