@@ -848,6 +848,7 @@ func (tn *ChainNode) ParamChangeProposal(ctx context.Context, keyName string, pr
 		"gov", "submit-legacy-proposal",
 		"param-change",
 		proposalPath,
+		"--gas", "auto",
 	}
 
 	return tn.ExecTx(ctx, keyName, command...)
