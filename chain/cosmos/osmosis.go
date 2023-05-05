@@ -35,7 +35,7 @@ func OsmosisCreatePool(c *CosmosChain, ctx context.Context, keyName string, para
 
 	if _, err := tn.ExecTx(ctx, keyName,
 		"gamm", "create-pool",
-		"--pool-file", filepath.Join(tn.HomeDir(), poolFile),
+		"--pool-file", filepath.Join(tn.HomeDir(), poolFile), "--gas", "auto",
 	); err != nil {
 		return "", fmt.Errorf("failed to create pool: %w", err)
 	}

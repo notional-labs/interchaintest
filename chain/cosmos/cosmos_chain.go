@@ -187,6 +187,11 @@ func (c *CosmosChain) Exec(ctx context.Context, cmd []string, env []string) (std
 	return c.getFullNode().Exec(ctx, cmd, env)
 }
 
+// ExecQuery
+func (c *CosmosChain) ExecQuery(ctx context.Context, cmd []string) (stdout, stderr []byte, err error) {
+	return c.getFullNode().ExecQuery(ctx, cmd...)
+}
+
 // Implements Chain interface
 func (c *CosmosChain) GetRPCAddress() string {
 	return fmt.Sprintf("http://%s:26657", c.getFullNode().HostName())
