@@ -103,7 +103,6 @@ func FeeabsAddHostZoneProposal(c *CosmosChain, ctx context.Context, keyName stri
 	command := []string{
 		"gov", "submit-legacy-proposal",
 		"add-hostzone-config", filePath,
-		"--gas", "auto",
 	}
 	return tn.ExecTx(ctx, keyName, command...)
 }
