@@ -351,7 +351,7 @@ func (ic *Interchain) genesisWalletAmounts(ctx context.Context) (map[ibc.Chain][
 			{
 				Address: faucetAddresses[c],
 				Denom:   c.Config().Denom,
-				Amount:  100_000_000_000_000_000, // Faucet wallet gets 100T units of denom.
+				Amount:  100_000_000_000_000, // Faucet wallet gets 100T units of denom.
 			},
 		}
 
