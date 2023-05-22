@@ -21,7 +21,7 @@ import (
 	"go.uber.org/zap"
 )
 
-// Increase parachain scaled wallet amounts relative to cosmos
+// Increase parachain wallet amount due to their additional precision
 const parachainScaling = int64(1_000)
 
 // ParachainNode defines the properties required for running a polkadot parachain node.

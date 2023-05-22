@@ -28,7 +28,7 @@ import (
 	"golang.org/x/sync/errgroup"
 )
 
-// Increase polkadot scaled wallet amounts relative to cosmos
+// Increase polkadot wallet amount due to their additional precision
 const polkadotScaling = int64(1_000)
 
 // PolkadotChain implements the ibc.Chain interface for substrate chains.
