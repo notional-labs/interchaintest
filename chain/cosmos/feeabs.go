@@ -27,6 +27,20 @@ type AddHostZoneProposal struct {
 	Deposit         string                `json:"deposit"`
 }
 
+func FeeabsQueryOsmosisTwap(c *CosmosChain, ctx context.Context, keyName string, duration string) error {
+	tn := c.getFullNode()
+
+	_, _ = tn.ExecTx(ctx, keyName,
+		"feeabs", "query-osmosis-twap", duration,
+		"--gas", "auto",
+	)
+	if err := testutil.WaitForBlocks(ctx, 2, tn); err != nil {
+		return err
+	}
+
+	return nil
+}
+
 func FeeabsCrossChainSwap(c *CosmosChain, ctx context.Context, keyName string, ibcDenom string) (tx ibc.Tx, _ error) {
 	tn := c.getFullNode()
 
