@@ -137,6 +137,7 @@ func buildChain(log *zap.Logger, testName string, cfg ibc.ChainConfig, numValida
 
 	switch cfg.Type {
 	case "cosmos":
+		fmt.Println("build cosmos chain")
 		return cosmos.NewCosmosChain(testName, cfg, nv, nf, log), nil
 	case "penumbra":
 		return penumbra.NewPenumbraChain(log, testName, cfg, nv, nf), nil
