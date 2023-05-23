@@ -86,7 +86,9 @@ func NewCosmosHeighlinerChainConfig(name string,
 func NewCosmosChain(testName string, chainConfig ibc.ChainConfig, numValidators int, numFullNodes int, log *zap.Logger) *CosmosChain {
 	fmt.Println("here it is")
 	if chainConfig.EncodingConfig == nil {
+		fmt.Println("this case")
 		cfg := DefaultEncoding()
+		fmt.Println("done default encoding")
 		chainConfig.EncodingConfig = &cfg
 	}
 	fmt.Println("done chain config")
