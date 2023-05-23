@@ -110,6 +110,7 @@ func (f *BuiltinChainFactory) Chains(testName string) ([]ibc.Chain, error) {
 		}
 		fmt.Println("lmaoooooooooooooooooooooooooooooooo")
 		chain, err := buildChain(f.log, testName, *cfg, s.NumValidators, s.NumFullNodes)
+		fmt.Println("done build chain")
 		if err != nil {
 			return nil, err
 		}
