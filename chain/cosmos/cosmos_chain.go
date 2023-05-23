@@ -88,10 +88,12 @@ func NewCosmosChain(testName string, chainConfig ibc.ChainConfig, numValidators 
 		cfg := DefaultEncoding()
 		chainConfig.EncodingConfig = &cfg
 	}
-
+	fmt.Println("done chain config")
 	registry := codectypes.NewInterfaceRegistry()
 	cryptocodec.RegisterInterfaces(registry)
+	fmt.Println("done registry")
 	cdc := codec.NewProtoCodec(registry)
+	fmt.Println("done codec")
 	kr := keyring.NewInMemory(cdc)
 
 	return &CosmosChain{
