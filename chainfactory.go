@@ -108,7 +108,7 @@ func (f *BuiltinChainFactory) Chains(testName string) ([]ibc.Chain, error) {
 
 			return nil, fmt.Errorf("failed to build chain config at index %d: %w", i, err)
 		}
-
+		fmt.Println("lmaoooooooooooooooooooooooooooooooo")
 		chain, err := buildChain(f.log, testName, *cfg, s.NumValidators, s.NumFullNodes)
 		if err != nil {
 			return nil, err
