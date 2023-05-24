@@ -30,7 +30,7 @@ type pathConfiguration struct {
 
 // pathChainConfig holds all values that will be required when interacting with a path.
 type pathChainConfig struct {
-	chainID      string
+	chainID string
 }
 
 func (hyperspaceCommander) Name() string {
@@ -96,8 +96,6 @@ func (c *hyperspaceCommander) CreateClients(pathName string, opts ibc.CreateClie
 		configPath(homeDir, c.paths[pathName].chainB.chainID),
 		"--config-core",
 		path.Join(homeDir, "core.config"),
-		"--delay-period",
-		"0",
 		"--port-id",
 		"transfer",
 		"--order",
