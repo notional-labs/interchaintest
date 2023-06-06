@@ -119,7 +119,7 @@ func (c *hyperspaceCommander) CreateConnections(pathName, homeDir string) []stri
 		"--config-core",
 		path.Join(homeDir, "core.config"),
 		"--delay-period",
-		"0",
+		"1",
 		"--port-id",
 		"transfer",
 		"--order",
