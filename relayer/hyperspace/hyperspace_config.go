@@ -56,6 +56,7 @@ type HyperspaceRelayerCosmosChainConfig struct {
 	WasmCodeId       string   `toml:"wasm_code_id"`
 	Keybase          KeyEntry `toml:"keybase"`
 	ChannelWhitelist []string `toml:"channel_whitelist"`
+	Mnemonic
 }
 
 const (

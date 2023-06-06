@@ -237,6 +237,7 @@ func (ic *Interchain) Build(ctx context.Context, rep *testreporter.RelayerExecRe
 	}
 
 	walletAmounts, err := ic.genesisWalletAmounts(ctx)
+
 	if err != nil {
 		// Error already wrapped with appropriate detail.
 		return err
@@ -307,7 +308,7 @@ func (ic *Interchain) Build(ctx context.Context, rep *testreporter.RelayerExecRe
 				return err
 			}
 
-			if err := rp.Relayer.LinkPath(ctx, rep, rp.Path, "", link.createChannelOpts, link.createClientOpts); err != nil {
+			if err := rp.Relayer.LinkPath(ctx, rep, rp.Path, link.createChannelOpts, link.createClientOpts); err != nil {
 				return fmt.Errorf(
 					"failed to link path %s on relayer %s between chains %s and %s: %w",
 					rp.Path, rp.Relayer, ic.chains[c0], ic.chains[c1], err,
@@ -414,6 +415,7 @@ func (ic *Interchain) configureRelayerKeys(ctx context.Context, rep *testreporte
 				rep,
 				c.Config(), chainName,
 				rpcAddr, grpcAddr,
+				ic.relayerWallets[relayerChain{R: r, C: c}].Mnemonic(),
 			); err != nil {
 				return fmt.Errorf("failed to configure relayer %s for chain %s: %w", ic.relayers[r], chainName, err)
 			}

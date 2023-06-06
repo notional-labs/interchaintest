@@ -162,14 +162,14 @@ func (r *DockerRelayer) AddWallet(chainID string, wallet ibc.Wallet) {
 	r.wallets[chainID] = wallet
 }
 
-func (r *DockerRelayer) AddChainConfiguration(ctx context.Context, rep ibc.RelayerExecReporter, chainConfig ibc.ChainConfig, keyName, rpcAddr, grpcAddr string) error {
+func (r *DockerRelayer) AddChainConfiguration(ctx context.Context, rep ibc.RelayerExecReporter, chainConfig ibc.ChainConfig, keyName, rpcAddr, grpcAddr, mnemonic string) error {
 	// For rly this file is json, but the file extension should not matter.
 	// Using .config to avoid implying any particular format.
 	chainConfigFile := chainConfig.ChainID + ".config"
 
 	chainConfigContainerFilePath := path.Join(r.HomeDir(), chainConfigFile)
 
-	configContent, err := r.c.ConfigContent(ctx, chainConfig, keyName, rpcAddr, grpcAddr)
+	configContent, err := r.c.ConfigContent(ctx, chainConfig, keyName, rpcAddr, grpcAddr, mnemonic)
 	if err != nil {
 		return fmt.Errorf("failed to generate config content: %w", err)
 	}
@@ -228,7 +228,7 @@ func (r *DockerRelayer) CreateClients(ctx context.Context, rep ibc.RelayerExecRe
 	return res.Err
 }
 
-func (r *DockerRelayer) CreateConnections(ctx context.Context, rep ibc.RelayerExecReporter, pathName, mnemonic string) error {
+func (r *DockerRelayer) CreateConnections(ctx context.Context, rep ibc.RelayerExecReporter, pathName string) error {
 	cmd := r.c.CreateConnections(pathName, r.HomeDir())
 	res := r.Exec(ctx, rep, cmd, nil)
 	return res.Err
@@ -287,7 +287,7 @@ func (r *DockerRelayer) GetClients(ctx context.Context, rep ibc.RelayerExecRepor
 	return r.c.ParseGetClientsOutput(string(res.Stdout), string(res.Stderr))
 }
 
-func (r *DockerRelayer) LinkPath(ctx context.Context, rep ibc.RelayerExecReporter, pathName, mnemonic string, channelOpts ibc.CreateChannelOptions, clientOpts ibc.CreateClientOptions) error {
+func (r *DockerRelayer) LinkPath(ctx context.Context, rep ibc.RelayerExecReporter, pathName string, channelOpts ibc.CreateChannelOptions, clientOpts ibc.CreateClientOptions) error {
 	cmd := r.c.LinkPath(pathName, r.HomeDir(), channelOpts, clientOpts)
 	res := r.Exec(ctx, rep, cmd, nil)
 	return res.Err
@@ -509,7 +509,7 @@ type RelayerCommander interface {
 	DockerUser() string
 
 	// ConfigContent generates the content of the config file that will be passed to AddChainConfiguration.
-	ConfigContent(ctx context.Context, cfg ibc.ChainConfig, keyName, rpcAddr, grpcAddr string) ([]byte, error)
+	ConfigContent(ctx context.Context, cfg ibc.ChainConfig, keyName, rpcAddr, grpcAddr, mnemonic string) ([]byte, error)
 
 	// ParseAddKeyOutput processes the output of AddKey
 	// to produce the wallet that was created.

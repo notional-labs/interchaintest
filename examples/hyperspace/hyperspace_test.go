@@ -217,7 +217,7 @@ func TestHyperspace(t *testing.T) {
 	require.NoError(t, err)
 
 	// Create a new connection
-	err = r.CreateConnections(ctx, eRep, pathName, "")
+	err = r.CreateConnections(ctx, eRep, pathName)
 	require.NoError(t, err)
 	err = testutil.WaitForBlocks(ctx, 1, cosmosChain, polkadotChain)
 	require.NoError(t, err)

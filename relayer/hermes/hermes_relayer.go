@@ -75,8 +75,8 @@ func NewHermesRelayer(log *zap.Logger, testName string, cli *client.Client, netw
 
 // AddChainConfiguration is called once per chain configuration, which means that in the case of hermes, the single
 // config file is overwritten with a new entry each time this function is called.
-func (r *Relayer) AddChainConfiguration(ctx context.Context, rep ibc.RelayerExecReporter, chainConfig ibc.ChainConfig, keyName, rpcAddr, grpcAddr string) error {
-	configContent, err := r.configContent(chainConfig, keyName, rpcAddr, grpcAddr)
+func (r *Relayer) AddChainConfiguration(ctx context.Context, rep ibc.RelayerExecReporter, chainConfig ibc.ChainConfig, keyName, rpcAddr, grpcAddr, mnemonic string) error {
+	configContent, err := r.configContent(chainConfig, keyName, rpcAddr, grpcAddr, mnemonic)
 	if err != nil {
 		return fmt.Errorf("failed to generate config content: %w", err)
 	}
@@ -90,7 +90,7 @@ func (r *Relayer) AddChainConfiguration(ctx context.Context, rep ibc.RelayerExec
 
 // LinkPath performs the operations that happen when a path is linked. This includes creating clients, creating connections
 // and establishing a channel. This happens across multiple operations rather than a single link path cli command.
-func (r *Relayer) LinkPath(ctx context.Context, rep ibc.RelayerExecReporter, pathName, mnemonic string, channelOpts ibc.CreateChannelOptions, clientOpts ibc.CreateClientOptions) error {
+func (r *Relayer) LinkPath(ctx context.Context, rep ibc.RelayerExecReporter, pathName string, channelOpts ibc.CreateChannelOptions, clientOpts ibc.CreateClientOptions) error {
 	_, ok := r.paths[pathName]
 	if !ok {
 		return fmt.Errorf("path %s not found", pathName)
@@ -100,7 +100,7 @@ func (r *Relayer) LinkPath(ctx context.Context, rep ibc.RelayerExecReporter, pat
 		return err
 	}
 
-	if err := r.CreateConnections(ctx, rep, pathName, mnemonic); err != nil {
+	if err := r.CreateConnections(ctx, rep, pathName); err != nil {
 		return err
 	}
 
@@ -126,7 +126,7 @@ func (r *Relayer) CreateChannel(ctx context.Context, rep ibc.RelayerExecReporter
 	return nil
 }
 
-func (r *Relayer) CreateConnections(ctx context.Context, rep ibc.RelayerExecReporter, pathName, mnemonic string) error {
+func (r *Relayer) CreateConnections(ctx context.Context, rep ibc.RelayerExecReporter, pathName string) error {
 	pathConfig := r.paths[pathName]
 	cmd := []string{hermes, "--json", "create", "connection", "--a-chain", pathConfig.chainA.chainID, "--a-client", pathConfig.chainA.clientID, "--b-client", pathConfig.chainB.clientID}
 
@@ -249,7 +249,7 @@ func (r *Relayer) GeneratePath(ctx context.Context, rep ibc.RelayerExecReporter,
 // configContent returns the contents of the hermes config file as a byte array. Note: as hermes expects a single file
 // rather than multiple config files, we need to maintain a list of chain configs each time they are added to write the
 // full correct file update calling Relayer.AddChainConfiguration.
-func (r *Relayer) configContent(cfg ibc.ChainConfig, keyName, rpcAddr, grpcAddr string) ([]byte, error) {
+func (r *Relayer) configContent(cfg ibc.ChainConfig, keyName, rpcAddr, grpcAddr, mnemonic string) ([]byte, error) {
 	r.chainConfigs = append(r.chainConfigs, ChainConfig{
 		cfg:      cfg,
 		keyName:  keyName,
