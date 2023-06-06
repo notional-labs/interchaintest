@@ -56,7 +56,7 @@ type HyperspaceRelayerCosmosChainConfig struct {
 	WasmCodeId       string   `toml:"wasm_code_id"`
 	Keybase          KeyEntry `toml:"keybase"`
 	ChannelWhitelist []string `toml:"channel_whitelist"`
-	Mnemonic
+	Mnemonic         string   `toml:"mnemonic"`
 }
 
 const (
@@ -98,7 +98,7 @@ func GenKeyEntry(bech32Prefix, coinType, mnemonic string) KeyEntry {
 		Address:    address.Bytes(),                     // i.e. [9, 13, 32, 191, 206, 194, 159, 239, 250, 89, 193, 7, 23, 99, 96, 46, 7, 74, 172, 14]
 	}
 }
-func ChainConfigToHyperspaceRelayerChainConfig(chainConfig ibc.ChainConfig, keyName, rpcAddr, grpcAddr string) interface{} {
+func ChainConfigToHyperspaceRelayerChainConfig(chainConfig ibc.ChainConfig, keyName, rpcAddr, grpcAddr, mnemonic string) interface{} {
 	chainType := chainConfig.Type
 	if chainType == "polkadot" || chainType == "parachain" || chainType == "relaychain" {
 		chainType = "parachain"
@@ -138,6 +138,7 @@ func ChainConfigToHyperspaceRelayerChainConfig(chainConfig ibc.ChainConfig, keyN
 			StorePrefix:   "ibc",
 			MaxTxSize:     200000,
 			WebsocketUrl:  wsUrl,
+			Mnemonic:      mnemonic,
 		}
 	} else {
 		panic(fmt.Sprintf("unsupported chain type %s", chainType))
