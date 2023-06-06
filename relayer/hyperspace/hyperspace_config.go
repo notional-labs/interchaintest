@@ -56,7 +56,6 @@ type HyperspaceRelayerCosmosChainConfig struct {
 	WasmCodeId       string   `toml:"wasm_code_id"`
 	Keybase          KeyEntry `toml:"keybase"`
 	ChannelWhitelist []string `toml:"channel_whitelist"`
-	Mnemonic         string   `toml:"mnemonic"`
 }
 
 const (
@@ -138,7 +137,6 @@ func ChainConfigToHyperspaceRelayerChainConfig(chainConfig ibc.ChainConfig, keyN
 			StorePrefix:   "ibc",
 			MaxTxSize:     200000,
 			WebsocketUrl:  wsUrl,
-			Mnemonic:      "taste shoot adapt slow truly grape gift need suggest midnight burger horn whisper hat vast aspect exit scorpion jewel axis great area awful blind",
 		}
 	} else {
 		panic(fmt.Sprintf("unsupported chain type %s", chainType))
