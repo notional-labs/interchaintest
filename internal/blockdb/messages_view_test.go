@@ -117,7 +117,7 @@ WHERE type = "/ibc.core.client.v1.MsgCreateClient" AND chain_id = ?;`
 		require.NoError(t, testutil.WaitForBlocks(ctx, 2, gaia0, gaia1))
 
 		// Next, create the connections.
-		require.NoError(t, r.CreateConnections(ctx, eRep, pathName))
+		require.NoError(t, r.CreateConnections(ctx, eRep, pathName, ""))
 
 		// Wait for another block before retrieving the connections and querying for them.
 		require.NoError(t, testutil.WaitForBlocks(ctx, 1, gaia0, gaia1))

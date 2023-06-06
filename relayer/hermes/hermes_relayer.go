@@ -90,7 +90,7 @@ func (r *Relayer) AddChainConfiguration(ctx context.Context, rep ibc.RelayerExec
 
 // LinkPath performs the operations that happen when a path is linked. This includes creating clients, creating connections
 // and establishing a channel. This happens across multiple operations rather than a single link path cli command.
-func (r *Relayer) LinkPath(ctx context.Context, rep ibc.RelayerExecReporter, pathName string, channelOpts ibc.CreateChannelOptions, clientOpts ibc.CreateClientOptions) error {
+func (r *Relayer) LinkPath(ctx context.Context, rep ibc.RelayerExecReporter, pathName, mnemonic string, channelOpts ibc.CreateChannelOptions, clientOpts ibc.CreateClientOptions) error {
 	_, ok := r.paths[pathName]
 	if !ok {
 		return fmt.Errorf("path %s not found", pathName)
@@ -100,7 +100,7 @@ func (r *Relayer) LinkPath(ctx context.Context, rep ibc.RelayerExecReporter, pat
 		return err
 	}
 
-	if err := r.CreateConnections(ctx, rep, pathName); err != nil {
+	if err := r.CreateConnections(ctx, rep, pathName, mnemonic); err != nil {
 		return err
 	}
 
@@ -126,7 +126,7 @@ func (r *Relayer) CreateChannel(ctx context.Context, rep ibc.RelayerExecReporter
 	return nil
 }
 
-func (r *Relayer) CreateConnections(ctx context.Context, rep ibc.RelayerExecReporter, pathName string) error {
+func (r *Relayer) CreateConnections(ctx context.Context, rep ibc.RelayerExecReporter, pathName, mnemonic string) error {
 	pathConfig := r.paths[pathName]
 	cmd := []string{hermes, "--json", "create", "connection", "--a-chain", pathConfig.chainA.chainID, "--a-client", pathConfig.chainA.clientID, "--b-client", pathConfig.chainB.clientID}
 
