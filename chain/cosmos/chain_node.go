@@ -878,6 +878,7 @@ func (tn *ChainNode) LegacyUpgradeProposal(ctx context.Context, keyName string, 
 		"--description", prop.Description,
 		"--deposit", prop.Deposit,
 		"--no-validate",
+		"--chain-id", tn.Chain.Config().ChainID,
 	}
 
 	if prop.Info != "" {
