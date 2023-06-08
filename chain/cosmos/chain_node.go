@@ -802,7 +802,7 @@ func (tn *ChainNode) StoreClientContract(ctx context.Context, keyName string, fi
 		return "", fmt.Errorf("writing contract file to docker volume: %w", err)
 	}
 
-	_, err = tn.ExecTx(ctx, keyName, "08-wasm", "push-wasm", path.Join(tn.HomeDir(), file), "--gas", "auto")
+	_, err = tn.ExecTx(ctx, keyName, "08-wasm", "push-wasm", "--chain-id", tn.Chain.Config().ChainID, path.Join(tn.HomeDir(), file), "--gas", "auto")
 	if err != nil {
 		return "", err
 	}
