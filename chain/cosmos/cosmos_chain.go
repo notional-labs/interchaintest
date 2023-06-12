@@ -490,23 +490,23 @@ func (c *CosmosChain) ExportState(ctx context.Context, height int64) (string, er
 }
 
 // QuerySlashValidator takes a address and return missedBlockCounter
-func (c *CosmosChain) QueryMissedBlocks(ctx context.Context, address string) (int64, error) {
-	params := slashingtypes.QuerySigningInfoRequest{ConsAddress: address}
+func (c *CosmosChain) QuerySigningInfos(ctx context.Context, address string) ([]slashingtypes.ValidatorSigningInfo, error) {
+	params := slashingtypes.QuerySigningInfosRequest{}
 	grpcAddress := c.getFullNode().hostGRPCPort
 	conn, err := grpc.Dial(grpcAddress, grpc.WithTransportCredentials(insecure.NewCredentials()))
 	if err != nil {
-		return 0, err
+		return nil, err
 	}
 	defer conn.Close()
 
 	queryClient := slashingtypes.NewQueryClient(conn)
-	res, err := queryClient.SigningInfo(ctx, &params)
+	res, err := queryClient.SigningInfos(ctx, &params)
 
 	if err != nil {
-		return 0, err
+		return nil, err
 	}
 
-	return res.ValSigningInfo.MissedBlocksCounter, nil
+	return res.Info, nil
 }
 
 func (c *CosmosChain) QueryValidators(ctx context.Context) ([]stakingtypes.Validator, error) {
