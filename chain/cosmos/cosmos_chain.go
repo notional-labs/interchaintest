@@ -490,7 +490,7 @@ func (c *CosmosChain) ExportState(ctx context.Context, height int64) (string, er
 }
 
 // QuerySlashValidator takes a address and return missedBlockCounter
-func (c *CosmosChain) QuerySigningInfos(ctx context.Context, address string) ([]slashingtypes.ValidatorSigningInfo, error) {
+func (c *CosmosChain) QuerySigningInfos(ctx context.Context) ([]slashingtypes.ValidatorSigningInfo, error) {
 	params := slashingtypes.QuerySigningInfosRequest{}
 	grpcAddress := c.getFullNode().hostGRPCPort
 	conn, err := grpc.Dial(grpcAddress, grpc.WithTransportCredentials(insecure.NewCredentials()))
