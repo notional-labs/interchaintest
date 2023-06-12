@@ -26,6 +26,7 @@ import (
 	govtypes "github.com/cosmos/cosmos-sdk/x/gov/types"
 	paramsutils "github.com/cosmos/cosmos-sdk/x/params/client/utils"
 	slashingtypes "github.com/cosmos/cosmos-sdk/x/slashing/types"
+	stakingtypes "github.com/cosmos/cosmos-sdk/x/staking/types"
 	chanTypes "github.com/cosmos/ibc-go/v7/modules/core/04-channel/types"
 	dockertypes "github.com/docker/docker/api/types"
 	volumetypes "github.com/docker/docker/api/types/volume"
@@ -488,8 +489,8 @@ func (c *CosmosChain) ExportState(ctx context.Context, height int64) (string, er
 	return c.getFullNode().ExportState(ctx, height)
 }
 
-// StoreClientContract takes a file path to a client smart contract and stores it on-chain. Returns the contracts code id.
-func (c *CosmosChain) QuerySlashValidator(ctx context.Context, address string) (int64, error) {
+// QuerySlashValidator takes a address and return missedBlockCounter
+func (c *CosmosChain) QueryMissedBlocks(ctx context.Context, address string) (int64, error) {
 	params := slashingtypes.QuerySigningInfoRequest{ConsAddress: address}
 	grpcAddress := c.getFullNode().hostGRPCPort
 	conn, err := grpc.Dial(grpcAddress, grpc.WithTransportCredentials(insecure.NewCredentials()))
@@ -506,6 +507,25 @@ func (c *CosmosChain) QuerySlashValidator(ctx context.Context, address string) (
 	}
 
 	return res.ValSigningInfo.MissedBlocksCounter, nil
+}
+
+func (c *CosmosChain) QueryValidators(ctx context.Context) ([]stakingtypes.Validator, error) {
+	params := stakingtypes.QueryValidatorsRequest{}
+	grpcAddress := c.getFullNode().hostGRPCPort
+	conn, err := grpc.Dial(grpcAddress, grpc.WithTransportCredentials(insecure.NewCredentials()))
+	if err != nil {
+		return nil, err
+	}
+	defer conn.Close()
+
+	queryClient := stakingtypes.NewQueryClient(conn)
+	res, err := queryClient.Validators(ctx, &params)
+
+	if err != nil {
+		return nil, err
+	}
+
+	return res.Validators, nil
 }
 
 // GetBalance fetches the current balance for a specific account address and denom.
