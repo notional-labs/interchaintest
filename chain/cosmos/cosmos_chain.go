@@ -489,7 +489,7 @@ func (c *CosmosChain) ExportState(ctx context.Context, height int64) (string, er
 	return c.getFullNode().ExportState(ctx, height)
 }
 
-// QuerySlashValidator takes a address and return missedBlockCounter
+// QuerySigningInfos return all validators signingInfo
 func (c *CosmosChain) QuerySigningInfos(ctx context.Context) ([]slashingtypes.ValidatorSigningInfo, error) {
 	params := slashingtypes.QuerySigningInfosRequest{}
 	grpcAddress := c.getFullNode().hostGRPCPort
@@ -509,6 +509,7 @@ func (c *CosmosChain) QuerySigningInfos(ctx context.Context) ([]slashingtypes.Va
 	return res.Info, nil
 }
 
+// QueryValidators return all validators
 func (c *CosmosChain) QueryValidators(ctx context.Context) ([]stakingtypes.Validator, error) {
 	params := stakingtypes.QueryValidatorsRequest{}
 	grpcAddress := c.getFullNode().hostGRPCPort
@@ -526,6 +527,26 @@ func (c *CosmosChain) QueryValidators(ctx context.Context) ([]stakingtypes.Valid
 	}
 
 	return res.Validators, nil
+}
+
+// QueryValidators return all validators
+func (c *CosmosChain) QuerySlashingParams(ctx context.Context) (slashingtypes.QueryParamsResponse, error) {
+	params := slashingtypes.QueryParamsRequest{}
+	grpcAddress := c.getFullNode().hostGRPCPort
+	conn, err := grpc.Dial(grpcAddress, grpc.WithTransportCredentials(insecure.NewCredentials()))
+	if err != nil {
+		return slashingtypes.QueryParamsResponse{}, err
+	}
+	defer conn.Close()
+
+	queryClient := slashingtypes.NewQueryClient(conn)
+	res, err := queryClient.Params(ctx, &params)
+
+	if err != nil {
+		return slashingtypes.QueryParamsResponse{}, err
+	}
+
+	return *res, nil
 }
 
 // GetBalance fetches the current balance for a specific account address and denom.
