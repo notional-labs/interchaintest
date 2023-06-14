@@ -25,6 +25,8 @@ import (
 	bankTypes "github.com/cosmos/cosmos-sdk/x/bank/types"
 	govtypes "github.com/cosmos/cosmos-sdk/x/gov/types"
 	paramsutils "github.com/cosmos/cosmos-sdk/x/params/client/utils"
+	slashingtypes "github.com/cosmos/cosmos-sdk/x/slashing/types"
+	stakingtypes "github.com/cosmos/cosmos-sdk/x/staking/types"
 	chanTypes "github.com/cosmos/ibc-go/v7/modules/core/04-channel/types"
 	dockertypes "github.com/docker/docker/api/types"
 	volumetypes "github.com/docker/docker/api/types/volume"
@@ -485,6 +487,66 @@ func (c *CosmosChain) QueryClientContractCode(ctx context.Context, codeHash stri
 // Implements Chain interface
 func (c *CosmosChain) ExportState(ctx context.Context, height int64) (string, error) {
 	return c.getFullNode().ExportState(ctx, height)
+}
+
+// QuerySigningInfos return all validators signingInfo
+func (c *CosmosChain) QuerySigningInfos(ctx context.Context) ([]slashingtypes.ValidatorSigningInfo, error) {
+	params := slashingtypes.QuerySigningInfosRequest{}
+	grpcAddress := c.getFullNode().hostGRPCPort
+	conn, err := grpc.Dial(grpcAddress, grpc.WithTransportCredentials(insecure.NewCredentials()))
+	if err != nil {
+		return nil, err
+	}
+	defer conn.Close()
+
+	queryClient := slashingtypes.NewQueryClient(conn)
+	res, err := queryClient.SigningInfos(ctx, &params)
+
+	if err != nil {
+		return nil, err
+	}
+
+	return res.Info, nil
+}
+
+// QueryValidators return all validators
+func (c *CosmosChain) QueryValidators(ctx context.Context) ([]stakingtypes.Validator, error) {
+	params := stakingtypes.QueryValidatorsRequest{}
+	grpcAddress := c.getFullNode().hostGRPCPort
+	conn, err := grpc.Dial(grpcAddress, grpc.WithTransportCredentials(insecure.NewCredentials()))
+	if err != nil {
+		return nil, err
+	}
+	defer conn.Close()
+
+	queryClient := stakingtypes.NewQueryClient(conn)
+	res, err := queryClient.Validators(ctx, &params)
+
+	if err != nil {
+		return nil, err
+	}
+
+	return res.Validators, nil
+}
+
+// QueryValidators return all validators
+func (c *CosmosChain) QuerySlashingParams(ctx context.Context) (slashingtypes.QueryParamsResponse, error) {
+	params := slashingtypes.QueryParamsRequest{}
+	grpcAddress := c.getFullNode().hostGRPCPort
+	conn, err := grpc.Dial(grpcAddress, grpc.WithTransportCredentials(insecure.NewCredentials()))
+	if err != nil {
+		return slashingtypes.QueryParamsResponse{}, err
+	}
+	defer conn.Close()
+
+	queryClient := slashingtypes.NewQueryClient(conn)
+	res, err := queryClient.Params(ctx, &params)
+
+	if err != nil {
+		return slashingtypes.QueryParamsResponse{}, err
+	}
+
+	return *res, nil
 }
 
 // GetBalance fetches the current balance for a specific account address and denom.
