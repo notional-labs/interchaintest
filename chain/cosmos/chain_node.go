@@ -409,7 +409,6 @@ func (tn *ChainNode) TxCommand(keyName string, command ...string) []string {
 		"--gas", "auto",
 		"--keyring-backend", keyring.BackendTest,
 		"--output", "json",
-		"--chain-id", tn.Chain.Config().ChainID,
 		"-y",
 	)...)
 }
@@ -721,12 +720,7 @@ func (tn *ChainNode) StoreContract(ctx context.Context, keyName string, fileName
 		return "", fmt.Errorf("writing contract file to docker volume: %w", err)
 	}
 
-	command := []string{"wasm", "store", "-h"}
-	command = append([]string{"centaurid tx"}, command...)
-	out, _, err := tn.Exec(ctx, command, nil)
-	fmt.Println("out", out)
-	fmt.Println("out", err)
-	command = []string{"wasm", "store", path.Join(tn.HomeDir(), file)}
+	command := []string{"wasm", "store", path.Join(tn.HomeDir(), file), "--chain-id", tn.Chain.Config().ChainID}
 	command = append(command, extraExecTxArgs...)
 
 	if _, err := tn.ExecTx(ctx, keyName, command...); err != nil {
