@@ -721,8 +721,14 @@ func (tn *ChainNode) StoreContract(ctx context.Context, keyName string, fileName
 		return "", fmt.Errorf("writing contract file to docker volume: %w", err)
 	}
 
-	command := []string{"wasm", "store", path.Join(tn.HomeDir(), file)}
+	command := []string{"wasm", "store", "-h"}
+	command = append([]string{"tx"}, command...)
+	out, _, err := tn.Exec(ctx, command, nil)
+	fmt.Println("out", out)
+	fmt.Println("out", err)
+	command = []string{"wasm", "store", path.Join(tn.HomeDir(), file)}
 	command = append(command, extraExecTxArgs...)
+
 	if _, err := tn.ExecTx(ctx, keyName, command...); err != nil {
 		return "", err
 	}
