@@ -722,7 +722,7 @@ func (tn *ChainNode) StoreContract(ctx context.Context, keyName string, fileName
 	}
 
 	command := []string{"wasm", "store", "-h"}
-	command = append([]string{"tx"}, command...)
+	command = append([]string{"centaurid tx"}, command...)
 	out, _, err := tn.Exec(ctx, command, nil)
 	fmt.Println("out", out)
 	fmt.Println("out", err)
