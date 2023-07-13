@@ -713,14 +713,16 @@ type CodeInfosResponse struct {
 }
 
 // StoreContract takes a file path to smart contract and stores it on-chain. Returns the contracts code id.
-func (tn *ChainNode) StoreContract(ctx context.Context, keyName string, fileName string) (string, error) {
+func (tn *ChainNode) StoreContract(ctx context.Context, keyName string, fileName string, extraExecTxArgs ...string) (string, error) {
 	_, file := filepath.Split(fileName)
 	err := tn.CopyFile(ctx, fileName, file)
 	if err != nil {
 		return "", fmt.Errorf("writing contract file to docker volume: %w", err)
 	}
 
-	if _, err := tn.ExecTx(ctx, keyName, "wasm", "store", path.Join(tn.HomeDir(), file)); err != nil {
+	command := []string{"wasm", "store", path.Join(tn.HomeDir(), file)}
+	command = append(command, extraExecTxArgs...)
+	if _, err := tn.ExecTx(ctx, keyName, command...); err != nil {
 		return "", err
 	}
 

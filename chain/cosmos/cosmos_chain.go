@@ -449,8 +449,8 @@ func (c *CosmosChain) txProposal(txHash string) (tx TxProposal, _ error) {
 }
 
 // StoreContract takes a file path to smart contract and stores it on-chain. Returns the contracts code id.
-func (c *CosmosChain) StoreContract(ctx context.Context, keyName string, fileName string) (string, error) {
-	return c.getFullNode().StoreContract(ctx, keyName, fileName)
+func (c *CosmosChain) StoreContract(ctx context.Context, keyName string, fileName string, extraExecTxArgs ...string) (string, error) {
+	return c.getFullNode().StoreContract(ctx, keyName, fileName, extraExecTxArgs...)
 }
 
 // InstantiateContract takes a code id for a smart contract and initialization message and returns the instantiated contract address.
