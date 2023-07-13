@@ -409,6 +409,7 @@ func (tn *ChainNode) TxCommand(keyName string, command ...string) []string {
 		"--gas", "auto",
 		"--keyring-backend", keyring.BackendTest,
 		"--output", "json",
+		"--chain-id", tn.Chain.Config().ChainID,
 		"-y",
 	)...)
 }
