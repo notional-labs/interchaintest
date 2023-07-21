@@ -863,6 +863,7 @@ func (tn *ChainNode) SubmitProposal(ctx context.Context, keyName string, prop Tx
 	command := []string{
 		"gov", "submit-proposal",
 		path.Join(tn.HomeDir(), file), "--gas", "auto",
+		"--chain-id", tn.Chain.Config().ChainID,
 	}
 
 	return tn.ExecTx(ctx, keyName, command...)
