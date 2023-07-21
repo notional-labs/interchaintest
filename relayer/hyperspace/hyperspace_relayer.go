@@ -105,7 +105,7 @@ func (r *HyperspaceRelayer) RestoreKey(ctx context.Context, rep ibc.RelayerExecR
 		bech32Prefix := cfg.Bech32Prefix
 		config.(*HyperspaceRelayerCosmosChainConfig).Keybase = GenKeyEntry(bech32Prefix, coinType, mnemonic)
 	case "polkadot":
-		config.(*HyperspaceRelayerSubstrateChainConfig).PrivateKey = mnemonic
+		config.(*HyperspaceRelayerSubstrateChainConfig).PrivateKey = "//Alice"
 	}
 
 	err = r.SetRelayerChainConfig(ctx, chainConfigFile, config)
