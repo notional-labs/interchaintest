@@ -130,7 +130,7 @@ func ChainConfigToHyperspaceRelayerChainConfig(chainConfig ibc.ChainConfig, keyN
 			Name:          chainConfig.Name,
 			ChainID:       chainConfig.ChainID,
 			AccountPrefix: chainConfig.Bech32Prefix,
-			FeeDenom:      "stake",
+			FeeDenom:      "ppica",
 			FeeAmount:     "4000",
 			GasLimit:      10_000_000,
 			GRPCUrl:       "http://" + grpcAddr,
