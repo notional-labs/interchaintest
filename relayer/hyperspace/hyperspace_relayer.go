@@ -118,7 +118,7 @@ func (r *HyperspaceRelayer) RestoreKey(ctx context.Context, rep ibc.RelayerExecR
 	return nil
 }
 
-func (r *HyperspaceRelayer) SetMnemonic(ctx context.Context, rep ibc.RelayerExecReporter, cfg ibc.ChainConfig, keyName, mnemonic string) error {
+func (r *HyperspaceRelayer) SetMnemonic(ctx context.Context, rep ibc.RelayerExecReporter, cfg ibc.ChainConfig, mnemonic string) error {
 	chainID := cfg.ChainID
 	chainType := cfg.Type
 	chainConfigFile := chainID + ".config"

@@ -497,6 +497,10 @@ func (r *DockerRelayer) SetClientContractHash(ctx context.Context, rep ibc.Relay
 	panic("[rly/SetClientContractHash] Implement me")
 }
 
+func (r *DockerRelayer) SetMnemonic(ctx context.Context, rep ibc.RelayerExecReporter, cfg ibc.ChainConfig, mnemonic string) error {
+	panic("[rly/SetMnemonic] Implement me")
+}
+
 type RelayerCommander interface {
 	// Name is the name of the relayer, e.g. "rly" or "hermes".
 	Name() string
