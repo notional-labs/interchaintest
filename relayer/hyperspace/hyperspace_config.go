@@ -41,22 +41,23 @@ type KeyEntry struct {
 }
 
 type HyperspaceRelayerCosmosChainConfig struct {
-	Type             string   `toml:"type"`
-	Name             string   `toml:"name"`
-	RPCUrl           string   `toml:"rpc_url"`
-	GRPCUrl          string   `toml:"grpc_url"`
-	WebsocketUrl     string   `toml:"websocket_url"`
-	ChainID          string   `toml:"chain_id"`
-	AccountPrefix    string   `toml:"account_prefix"`
-	FeeDenom         string   `toml:"fee_denom"`
-	FeeAmount        string   `toml:"fee_amount"`
-	GasLimit         uint64   `toml:"gas_limit"`
-	StorePrefix      string   `toml:"store_prefix"`
-	MaxTxSize        uint64   `toml:"max_tx_size"`
-	WasmCodeId       string   `toml:"wasm_code_id"`
-	Keybase          KeyEntry `toml:"keybase"`
-	ChannelWhitelist []string `toml:"channel_whitelist"`
-	Mnemonic         string   `toml:"mnemonic"`
+	Type                      string   `toml:"type"`
+	Name                      string   `toml:"name"`
+	RPCUrl                    string   `toml:"rpc_url"`
+	GRPCUrl                   string   `toml:"grpc_url"`
+	WebsocketUrl              string   `toml:"websocket_url"`
+	ChainID                   string   `toml:"chain_id"`
+	AccountPrefix             string   `toml:"account_prefix"`
+	FeeDenom                  string   `toml:"fee_denom"`
+	FeeAmount                 string   `toml:"fee_amount"`
+	GasLimit                  uint64   `toml:"gas_limit"`
+	StorePrefix               string   `toml:"store_prefix"`
+	MaxTxSize                 uint64   `toml:"max_tx_size"`
+	WasmCodeId                string   `toml:"wasm_code_id"`
+	Keybase                   KeyEntry `toml:"keybase"`
+	ChannelWhitelist          []string `toml:"channel_whitelist"`
+	Mnemonic                  string   `toml:"mnemonic"`
+	SkipOptionalClientUpdates bool     `toml:"skip_optional_client_updates"`
 }
 
 const (
@@ -126,19 +127,20 @@ func ChainConfigToHyperspaceRelayerChainConfig(chainConfig ibc.ChainConfig, keyN
 	} else if chainType == "cosmos" {
 		wsUrl := strings.Replace(rpcAddr, "http", "ws", 1) + "/websocket"
 		return HyperspaceRelayerCosmosChainConfig{
-			Type:          chainType,
-			Name:          chainConfig.Name,
-			ChainID:       chainConfig.ChainID,
-			AccountPrefix: chainConfig.Bech32Prefix,
-			FeeDenom:      "ppica",
-			FeeAmount:     "4000",
-			GasLimit:      10_000_000,
-			GRPCUrl:       "http://" + grpcAddr,
-			RPCUrl:        rpcAddr,
-			StorePrefix:   "ibc",
-			MaxTxSize:     200000,
-			WebsocketUrl:  wsUrl,
-			Mnemonic:      mnemonic,
+			Type:                      chainType,
+			Name:                      chainConfig.Name,
+			ChainID:                   chainConfig.ChainID,
+			AccountPrefix:             chainConfig.Bech32Prefix,
+			FeeDenom:                  "ppica",
+			FeeAmount:                 "4000",
+			GasLimit:                  10_000_000,
+			GRPCUrl:                   "http://" + grpcAddr,
+			RPCUrl:                    rpcAddr,
+			StorePrefix:               "ibc",
+			MaxTxSize:                 200000,
+			WebsocketUrl:              wsUrl,
+			Mnemonic:                  mnemonic,
+			SkipOptionalClientUpdates: true,
 		}
 	} else {
 		panic(fmt.Sprintf("unsupported chain type %s", chainType))
