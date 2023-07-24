@@ -415,7 +415,6 @@ func (ic *Interchain) configureRelayerKeys(ctx context.Context, rep *testreporte
 				rep,
 				c.Config(), chainName,
 				rpcAddr, grpcAddr,
-				ic.relayerWallets[relayerChain{R: r, C: c}].Mnemonic(),
 			); err != nil {
 				return fmt.Errorf("failed to configure relayer %s for chain %s: %w", ic.relayers[r], chainName, err)
 			}

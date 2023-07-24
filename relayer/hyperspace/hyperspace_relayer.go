@@ -105,7 +105,7 @@ func (r *HyperspaceRelayer) RestoreKey(ctx context.Context, rep ibc.RelayerExecR
 		bech32Prefix := cfg.Bech32Prefix
 		config.(*HyperspaceRelayerCosmosChainConfig).Keybase = GenKeyEntry(bech32Prefix, coinType, mnemonic)
 	case "polkadot":
-		config.(*HyperspaceRelayerSubstrateChainConfig).PrivateKey = "0xb7530aa2ee9d835d2a8ce428566203b06729a7a5bb0cc1f57edeb964d3707055"
+		config.(*HyperspaceRelayerSubstrateChainConfig).PrivateKey = "//Alice"
 	}
 
 	err = r.SetRelayerChainConfig(ctx, chainConfigFile, config)
@@ -114,6 +114,25 @@ func (r *HyperspaceRelayer) RestoreKey(ctx context.Context, rep ibc.RelayerExecR
 	}
 
 	r.AddWallet(chainID, NewWallet(chainID, addrBytes, mnemonic))
+
+	return nil
+}
+
+func (r *HyperspaceRelayer) SetMnemonic(ctx context.Context, rep ibc.RelayerExecReporter, cfg ibc.ChainConfig, keyName, mnemonic string) error {
+	chainID := cfg.ChainID
+	chainType := cfg.Type
+	chainConfigFile := chainID + ".config"
+	config, err := r.GetRelayerChainConfig(ctx, chainConfigFile, chainType)
+	if err != nil {
+		return err
+	}
+
+	config.(*HyperspaceRelayerCosmosChainConfig).Mnemonic = mnemonic
+
+	err = r.SetRelayerChainConfig(ctx, chainConfigFile, config)
+	if err != nil {
+		return err
+	}
 
 	return nil
 }
