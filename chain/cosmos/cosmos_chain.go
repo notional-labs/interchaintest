@@ -249,22 +249,17 @@ func (c *CosmosChain) BuildWallet(ctx context.Context, keyName string, mnemonic 
 		if err := c.RecoverKey(ctx, keyName, mnemonic); err != nil {
 			return nil, fmt.Errorf("failed to recover key with name %q on chain %s: %w", keyName, c.cfg.Name, err)
 		}
+	} else {
+		if err := c.CreateKey(ctx, keyName); err != nil {
+			return nil, fmt.Errorf("failed to create key with name %q on chain %s: %w", keyName, c.cfg.Name, err)
+		}
 	}
 
-	info, mnemonic, err := c.keyring.NewMnemonic(
-		keyName,
-		keyring.English,
-		hd.CreateHDPath(types.CoinType, 0, 0).String(),
-		"", // Empty passphrase.
-		hd.Secp256k1,
-	)
+	addrBytes, err := c.GetAddress(ctx, keyName)
 	if err != nil {
 		return nil, fmt.Errorf("failed to get account address for key %q on chain %s: %w", keyName, c.cfg.Name, err)
 	}
-	addrBytes, err := info.GetAddress()
-	if err != nil {
-		return nil, fmt.Errorf("failed to get account address for key %q on chain %s: %w", keyName, c.cfg.Name, err)
-	}
+
 	return NewWallet(keyName, addrBytes, mnemonic, c.cfg), nil
 }
 

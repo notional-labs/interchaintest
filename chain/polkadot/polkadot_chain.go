@@ -716,9 +716,16 @@ func (c *PolkadotChain) GetPublicKey(keyName string) ([]byte, error) {
 // If mnemonic != "", it will restore using that mnemonic
 // If mnemonic == "", it will create a new key
 func (c *PolkadotChain) BuildWallet(ctx context.Context, keyName string, mnemonic string) (ibc.Wallet, error) {
-	if err := c.CreateKey(ctx, keyName); err != nil {
-		return nil, fmt.Errorf("failed to create key with name %q on chain %s: %w", keyName, c.cfg.Name, err)
+	if mnemonic != "" {
+		if err := c.RecoverKey(ctx, keyName, mnemonic); err != nil {
+			return nil, fmt.Errorf("failed to recover key with name %q on chain %s: %w", keyName, c.cfg.Name, err)
+		}
+	} else {
+		if err := c.CreateKey(ctx, keyName); err != nil {
+			return nil, fmt.Errorf("failed to create key with name %q on chain %s: %w", keyName, c.cfg.Name, err)
+		}
 	}
+
 	addrBytes, err := c.GetAddress(ctx, keyName)
 	if err != nil {
 		return nil, fmt.Errorf("failed to get account address for key %q on chain %s: %w", keyName, c.cfg.Name, err)
