@@ -259,7 +259,17 @@ func (c *CosmosChain) BuildWallet(ctx context.Context, keyName string, mnemonic 
 	if err != nil {
 		return nil, fmt.Errorf("failed to get account address for key %q on chain %s: %w", keyName, c.cfg.Name, err)
 	}
-	return NewWallet(keyName, addrBytes, "name venue team knife time banner vehicle omit seminar hollow upgrade cabbage dune grape wedding wise coyote dragon burger churn wear party kite bicycle", c.cfg), nil
+	_, mnemonic, err = c.keyring.NewMnemonic(
+		keyName,
+		keyring.English,
+		hd.CreateHDPath(types.CoinType, 0, 0).String(),
+		"", // Empty passphrase.
+		hd.Secp256k1,
+	)
+	if err != nil {
+		return nil, fmt.Errorf("failed to get account address for key %q on chain %s: %w", keyName, c.cfg.Name, err)
+	}
+	return NewWallet(keyName, addrBytes, mnemonic, c.cfg), nil
 }
 
 // BuildRelayerWallet will return a Cosmos wallet populated with the mnemonic so that the wallet can
