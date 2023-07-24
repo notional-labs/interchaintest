@@ -54,7 +54,7 @@ func GetAndFundTestUsers(
 		i := i
 		chain := chain
 		eg.Go(func() error {
-			user, err := GetAndFundTestUserWithMnemonic(ctx, keyNamePrefix, "", amount, chain)
+			user, err := GetAndFundTestUserWithMnemonic(ctx, keyNamePrefix, "aa", amount, chain)
 			if err != nil {
 				return err
 			}
