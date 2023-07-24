@@ -246,12 +246,8 @@ func (c *CosmosChain) GetAddress(ctx context.Context, keyName string) ([]byte, e
 // If mnemonic == "", it will create a new key
 func (c *CosmosChain) BuildWallet(ctx context.Context, keyName string, mnemonic string) (ibc.Wallet, error) {
 	if mnemonic != "" {
-		if err := c.RecoverKey(ctx, keyName, "name venue team knife time banner vehicle omit seminar hollow upgrade cabbage dune grape wedding wise coyote dragon burger churn wear party kite bicycle"); err != nil {
+		if err := c.RecoverKey(ctx, keyName, mnemonic); err != nil {
 			return nil, fmt.Errorf("failed to recover key with name %q on chain %s: %w", keyName, c.cfg.Name, err)
-		}
-	} else {
-		if err := c.CreateKey(ctx, keyName); err != nil {
-			return nil, fmt.Errorf("failed to create key with name %q on chain %s: %w", keyName, c.cfg.Name, err)
 		}
 	}
 
