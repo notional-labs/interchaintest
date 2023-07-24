@@ -119,7 +119,7 @@ func ChainConfigToHyperspaceRelayerChainConfig(chainConfig ibc.ChainConfig, keyN
 			ParachainRPCURL:  strings.Replace(strings.Replace(paraRpcAddr, "http", "ws", 1), "9933", "27451", 1),
 			RelayChainRPCURL: strings.Replace(strings.Replace(relayRpcAddr, "http", "ws", 1), "9933", "27451", 1),
 			CommitmentPrefix: "0x6962632f",
-			PrivateKey:       keyName,
+			PrivateKey:       "0xb7530aa2ee9d835d2a8ce428566203b06729a7a5bb0cc1f57edeb964d3707055",
 			SS58Version:      polkadot.Ss58Format,
 			KeyType:          "sr25519",
 			FinalityProtocol: "Grandpa",
