@@ -137,7 +137,7 @@ func ChainConfigToHyperspaceRelayerChainConfig(chainConfig ibc.ChainConfig, keyN
 			GRPCUrl:                   "http://" + grpcAddr,
 			RPCUrl:                    rpcAddr,
 			StorePrefix:               "ibc",
-			MaxTxSize:                 200000,
+			MaxTxSize:                 200000000,
 			WebsocketUrl:              wsUrl,
 			SkipOptionalClientUpdates: true,
 		}
