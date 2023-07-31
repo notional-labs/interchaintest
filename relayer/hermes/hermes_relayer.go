@@ -128,9 +128,8 @@ func (r *Relayer) CreateChannel(ctx context.Context, rep ibc.RelayerExecReporter
 
 func (r *Relayer) CreateConnections(ctx context.Context, rep ibc.RelayerExecReporter, pathName string) error {
 	pathConfig := r.paths[pathName]
-	cmd := []string{hermes, "--json", "create", "connection", "--a-chain", pathConfig.chainA.chainID, "--a-client", pathConfig.chainA.clientID, "--b-client", pathConfig.chainB.clientID}
-	env := []string{"RUST_LOG=hyperspace=trace,hyperspace_cosmos=trace"}
-	res := r.Exec(ctx, rep, cmd, env)
+	cmd := []string{"RUST_LOG=hyperspace=trace,hyperspace_cosmos=trace", hermes, "--json", "create", "connection", "--a-chain", pathConfig.chainA.chainID, "--a-client", pathConfig.chainA.clientID, "--b-client", pathConfig.chainB.clientID}
+	res := r.Exec(ctx, rep, cmd, nil)
 	if res.Err != nil {
 		return res.Err
 	}
