@@ -1000,7 +1000,7 @@ func (tn *ChainNode) ParamChangeProposal(ctx context.Context, keyName string, pr
 	proposalPath := filepath.Join(tn.HomeDir(), proposalFilename)
 
 	command := []string{
-		"gov", "submit-proposal",
+		"gov", "submit-legacy-proposal",
 		"param-change",
 		proposalPath,
 		"--gas", "auto",
