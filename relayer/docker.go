@@ -230,7 +230,8 @@ func (r *DockerRelayer) CreateClients(ctx context.Context, rep ibc.RelayerExecRe
 
 func (r *DockerRelayer) CreateConnections(ctx context.Context, rep ibc.RelayerExecReporter, pathName string) error {
 	cmd := r.c.CreateConnections(pathName, r.HomeDir())
-	res := r.Exec(ctx, rep, cmd, nil)
+	env := []string{"RUST_LOG=hyperspace=trace,hyperspace_cosmos=trace,hyperspace_core=trace"}
+	res := r.Exec(ctx, rep, cmd, env)
 	return res.Err
 }
 
