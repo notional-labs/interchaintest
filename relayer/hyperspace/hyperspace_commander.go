@@ -110,6 +110,7 @@ func (c *hyperspaceCommander) CreateConnections(pathName, homeDir string) []stri
 		panic(fmt.Sprintf("path %s not found", pathName))
 	}
 	return []string{
+		"RUST_LOG=hyperspace=trace,hyperspace_cosmos=trace,hyperspace_core=trace",
 		"hyperspace",
 		"create-connection",
 		"--config-a",
