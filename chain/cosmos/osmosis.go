@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"path/filepath"
+	"strconv"
 	"strings"
 
 	"github.com/strangelove-ventures/interchaintest/v7/internal/dockerutil"
@@ -62,5 +63,15 @@ func OsmosisSwapExactAmountIn(c *CosmosChain, ctx context.Context, keyName strin
 		coinIn, minAmountOut,
 		"--swap-route-pool-ids", strings.Join(poolIDs, ","),
 		"--swap-route-denoms", strings.Join(swapDenoms, ","),
+	)
+}
+
+func OsmosisSetupProposePFM(c *CosmosChain, ctx context.Context, keyName string, contractAddress string, message string, ibcdenom string) (txHash string, err error) {
+	oneCoin := strconv.FormatInt(1, 10)
+	amount := oneCoin + ibcdenom
+	fmt.Println(amount)
+	tn := c.getFullNode()
+	return tn.ExecTx(ctx, keyName,
+		"wasm", "execute", contractAddress, message, "--amount", amount,
 	)
 }
