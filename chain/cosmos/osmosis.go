@@ -72,6 +72,6 @@ func OsmosisSetupProposePFM(c *CosmosChain, ctx context.Context, keyName string,
 	fmt.Println(amount)
 	tn := c.getFullNode()
 	return tn.ExecTx(ctx, keyName,
-		"wasm", "execute", contractAddress, message, "--amount", amount,
+		"wasm", "execute", contractAddress, message, "--amount", amount, "--gas", "1000000",
 	)
 }
