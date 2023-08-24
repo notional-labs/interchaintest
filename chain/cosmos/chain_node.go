@@ -192,6 +192,10 @@ func (tn *ChainNode) Name() string {
 	return fmt.Sprintf("%s-%s-%d-%s", tn.Chain.Config().ChainID, nodeType, tn.Index, dockerutil.SanitizeContainerName(tn.TestName))
 }
 
+func (tn *ChainNode) ContainerID() string {
+	return tn.containerLifecycle.ContainerID()
+}
+
 // hostname of the test node container
 func (tn *ChainNode) HostName() string {
 	return dockerutil.CondenseHostName(tn.Name())
@@ -666,6 +670,11 @@ func (tn *ChainNode) AddGenesisAccount(ctx context.Context, address string, gene
 	}
 
 	command = append(command, "add-genesis-account", address, amount)
+
+	if tn.Chain.Config().UsingChainIDFlagCLI {
+		command = append(command, "--chain-id", tn.Chain.Config().ChainID)
+	}
+
 	_, _, err := tn.ExecBin(ctx, command...)
 
 	return err
@@ -720,7 +729,7 @@ func (tn *ChainNode) SendIBCTransfer(
 ) (string, error) {
 	command := []string{
 		"ibc-transfer", "transfer", "transfer", channelID,
-		amount.Address, fmt.Sprintf("%d%s", amount.Amount, amount.Denom),
+		amount.Address, fmt.Sprintf("%s%s", amount.Amount.String(), amount.Denom),
 	}
 	if options.Timeout != nil {
 		if options.Timeout.NanoSeconds > 0 {
@@ -738,7 +747,7 @@ func (tn *ChainNode) SendIBCTransfer(
 func (tn *ChainNode) SendFunds(ctx context.Context, keyName string, amount ibc.WalletAmount) error {
 	_, err := tn.ExecTx(ctx,
 		keyName, "bank", "send", keyName,
-		amount.Address, fmt.Sprintf("%d%s", amount.Amount, amount.Denom),
+		amount.Address, fmt.Sprintf("%s%s", amount.Amount.String(), amount.Denom),
 	)
 	return err
 }
@@ -1304,7 +1313,7 @@ func (tn *ChainNode) SendICABankTransfer(ctx context.Context, connectionID, from
 		"amount": []map[string]any{
 			{
 				"denom":  amount.Denom,
-				"amount": amount.Amount,
+				"amount": amount.Amount.String(),
 			},
 		},
 	})
