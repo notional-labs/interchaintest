@@ -424,6 +424,7 @@ func (tn *ChainNode) TxCommand(keyName string, command ...string) []string {
 	}
 	return tn.NodeCommand(append(command,
 		"--from", keyName,
+		"--gas", "auto",
 		"--keyring-backend", keyring.BackendTest,
 		"--output", "json",
 		"-y",
