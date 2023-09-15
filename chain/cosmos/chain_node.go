@@ -803,6 +803,7 @@ func (tn *ChainNode) LegacyUpgradeProposal(ctx context.Context, keyName string, 
 		"--title", prop.Title,
 		"--description", prop.Description,
 		"--deposit", prop.Deposit,
+		"--no-validate",
 	}
 
 	if prop.Info != "" {
