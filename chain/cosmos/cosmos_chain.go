@@ -464,7 +464,7 @@ func (c *CosmosChain) getTransaction(txHash string) (*types.TxResponse, error) {
 		return err
 	},
 		// retry for total of 3 seconds
-		retry.Attempts(15),
+		retry.Attempts(45),
 		retry.Delay(200*time.Millisecond),
 		retry.DelayType(retry.FixedDelay),
 		retry.LastErrorOnly(true),
