@@ -459,6 +459,7 @@ func (c *CosmosChain) getTransaction(txHash string) (*types.TxResponse, error) {
 	err := retry.Do(func() error {
 		var err error
 		txResp, err = authTx.QueryTx(c.getFullNode().CliContext(), txHash)
+		fmt.Println(txHash)
 		fmt.Println(txResp)
 		return err
 	},
