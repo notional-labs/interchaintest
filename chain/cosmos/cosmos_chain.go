@@ -460,7 +460,7 @@ func (c *CosmosChain) getTransaction(txHash string) (*types.TxResponse, error) {
 		var err error
 		txResp, err = authTx.QueryTx(c.getFullNode().CliContext(), txHash)
 		fmt.Println(txHash)
-		fmt.Println(txResp.Data)
+		// fmt.Println(txResp)
 		fmt.Println(err)
 		return err
 	},
