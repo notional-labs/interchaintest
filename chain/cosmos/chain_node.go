@@ -20,7 +20,6 @@ import (
 	"github.com/cosmos/cosmos-sdk/client"
 	"github.com/cosmos/cosmos-sdk/crypto/keyring"
 	"github.com/cosmos/cosmos-sdk/types"
-	authTx "github.com/cosmos/cosmos-sdk/x/auth/tx"
 	paramsutils "github.com/cosmos/cosmos-sdk/x/params/client/utils"
 	stakingtypes "github.com/cosmos/cosmos-sdk/x/staking/types"
 	dockerclient "github.com/docker/docker/client"
@@ -732,23 +731,6 @@ type CodeInfo struct {
 }
 type CodeInfosResponse struct {
 	CodeInfos []CodeInfo `json:"code_infos"`
-}
-
-func (tn *ChainNode) getTransaction(clientCtx client.Context, txHash string) (*types.TxResponse, error) {
-	// Retry because sometimes the tx is not committed to state yet.
-	var txResp *types.TxResponse
-	err := retry.Do(func() error {
-		var err error
-		txResp, err = authTx.QueryTx(clientCtx, txHash)
-		return err
-	},
-		// retry for total of 3 seconds
-		retry.Attempts(15),
-		retry.Delay(200*time.Millisecond),
-		retry.DelayType(retry.FixedDelay),
-		retry.LastErrorOnly(true),
-	)
-	return txResp, err
 }
 
 // VoteOnProposal submits a vote for the specified proposal.
