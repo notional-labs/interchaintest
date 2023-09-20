@@ -216,7 +216,7 @@ replace (
 	github.com/ChainSafe/go-schnorrkel/1 => github.com/ChainSafe/go-schnorrkel v1.0.0
 	github.com/gogo/protobuf => github.com/regen-network/protobuf v1.3.3-alpha.regen.1
 
-	github.com/tendermint/tendermint => github.com/cometbft/cometbft v0.34.27
+	github.com/tendermint/tendermint => github.com/cometbft/cometbft v0.34.29
 	// github.com/tidwall/btree => github.com/tidwall/btree v1.5.0
 	github.com/vedhavyas/go-subkey => github.com/strangelove-ventures/go-subkey v1.0.7
 )
