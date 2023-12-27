@@ -466,8 +466,8 @@ func (tn *ChainNode) FindTxs(ctx context.Context, height uint64) ([]blockdb.Tx, 
 			attrs := make([]blockdb.EventAttribute, len(e.Attributes))
 			for j, attr := range e.Attributes {
 				attrs[j] = blockdb.EventAttribute{
-					Key:   string(attr.Key),
-					Value: string(attr.Value),
+					Key:   attr.Key,
+					Value: attr.Value,
 				}
 			}
 			endBlockTx.Events[i] = blockdb.Event{

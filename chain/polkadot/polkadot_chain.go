@@ -3,7 +3,6 @@ package polkadot
 import (
 	"context"
 	"crypto/rand"
-	crand "crypto/rand"
 	"encoding/json"
 	"fmt"
 	"io"
@@ -113,7 +112,7 @@ func (c *PolkadotChain) NewRelayChainNode(
 		return nil, err
 	}
 
-	nodeKey, _, err := p2pcrypto.GenerateEd25519Key(crand.Reader)
+	nodeKey, _, err := p2pcrypto.GenerateEd25519Key(rand.Reader)
 	if err != nil {
 		return nil, fmt.Errorf("error generating node key: %w", err)
 	}
@@ -194,7 +193,7 @@ func (c *PolkadotChain) NewParachainNode(
 	testName string,
 	parachainConfig ParachainConfig,
 ) (*ParachainNode, error) {
-	nodeKey, _, err := p2pcrypto.GenerateEd25519Key(crand.Reader)
+	nodeKey, _, err := p2pcrypto.GenerateEd25519Key(rand.Reader)
 	if err != nil {
 		return nil, fmt.Errorf("error generating node key: %w", err)
 	}
@@ -633,7 +632,7 @@ func NewMnemonic() (string, error) {
 func (c *PolkadotChain) CreateKey(ctx context.Context, keyName string) error {
 	_, err := c.keyring.Get(keyName)
 	if err == nil {
-		return fmt.Errorf("Key already exists: %s", keyName)
+		return fmt.Errorf("pey already exists: %s", keyName)
 	}
 
 	mnemonic, err := NewMnemonic()
@@ -663,7 +662,7 @@ func (c *PolkadotChain) CreateKey(ctx context.Context, keyName string) error {
 func (c *PolkadotChain) RecoverKey(ctx context.Context, keyName, mnemonic string) error {
 	_, err := c.keyring.Get(keyName)
 	if err == nil {
-		return fmt.Errorf("Key already exists: %s", keyName)
+		return fmt.Errorf("key already exists: %s", keyName)
 	}
 
 	kp, err := signature.KeyringPairFromSecret(mnemonic, Ss58Format)

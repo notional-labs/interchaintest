@@ -57,7 +57,7 @@ func DecodeAddressSS58(address string) ([]byte, error) {
 	} else if IntInSlice(len(ss58AddrDecoded), []int{17}) {
 		checksumLength = 8
 	} else {
-		return nil, fmt.Errorf("Cannot get checksum length")
+		return nil, fmt.Errorf("cannot get checksum length")
 	}
 	bss := ss58AddrDecoded[0 : len(ss58AddrDecoded)-checksumLength]
 	checksum, _ := blake2b.New(64, []byte{})
