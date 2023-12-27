@@ -81,6 +81,10 @@ func (c *hyperspaceCommander) CreateChannel(pathName string, opts ibc.CreateChan
 	}
 }
 
+func (c *hyperspaceCommander) CreateClient(srcChainID, dstChainID, pathName string, opts ibc.CreateClientOptions, homeDir string) []string {
+	panic("[CreateClient] do not call me")
+}
+
 func (c *hyperspaceCommander) CreateClients(pathName string, opts ibc.CreateClientOptions, homeDir string) []string {
 	fmt.Println("[hyperspace] CreateClients", pathName, opts, homeDir)
 	_, ok := c.paths[pathName]
@@ -154,7 +158,7 @@ func (c *hyperspaceCommander) GeneratePath(srcChainID, dstChainID, pathName, hom
 }
 
 // Hyperspace does not have paths, just two configs
-func (hyperspaceCommander) UpdatePath(pathName, homeDir string, filter ibc.ChannelFilter) []string {
+func (hyperspaceCommander) UpdatePath(pathName, homeDir string, opts ibc.PathUpdateOptions) []string {
 	panic("[UpdatePath] Do not call me")
 
 }

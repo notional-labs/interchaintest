@@ -16,7 +16,8 @@ import (
 var _ relayer.RelayerCommander = &commander{}
 
 type commander struct {
-	log *zap.Logger
+	log             *zap.Logger
+	extraStartFlags []string
 }
 
 func (c commander) Name() string {
@@ -135,14 +136,16 @@ func (c commander) GetClients(chainID, homeDir string) []string {
 }
 
 func (c commander) StartRelayer(homeDir string, pathNames ...string) []string {
-	return []string{hermes, "--config", fmt.Sprintf("%s/%s", homeDir, hermesConfigPath), "start", "--full-scan"}
+	cmd := []string{hermes, "--config", fmt.Sprintf("%s/%s", homeDir, hermesConfigPath), "start"}
+	cmd = append(cmd, c.extraStartFlags...)
+	return cmd
 }
 
 func (c commander) CreateWallet(keyName, address, mnemonic string) ibc.Wallet {
 	return NewWallet(keyName, address, mnemonic)
 }
 
-func (c commander) UpdatePath(pathName, homeDir string, filter ibc.ChannelFilter) []string {
+func (c commander) UpdatePath(pathName, homeDir string, opts ibc.PathUpdateOptions) []string {
 	// TODO: figure out how to implement this.
 	panic("implement me")
 }
@@ -176,6 +179,10 @@ func (c commander) AddKey(chainID, keyName, coinType, homeDir string) []string {
 
 func (c commander) CreateChannel(pathName string, opts ibc.CreateChannelOptions, homeDir string) []string {
 	panic("create channel implemented in hermes relayer not the commander")
+}
+
+func (c commander) CreateClient(srcChainID, dstChainID, pathName string, opts ibc.CreateClientOptions, homeDir string) []string {
+	panic("create client implemented in hermes relayer not the commander")
 }
 
 func (c commander) CreateClients(pathName string, opts ibc.CreateClientOptions, homeDir string) []string {
