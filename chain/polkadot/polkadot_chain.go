@@ -546,7 +546,6 @@ func (c *PolkadotChain) GetRPCAddress() string {
 
 	if len(c.ParachainNodes) > 0 && len(c.ParachainNodes[0]) > 0 {
 		parachainHostName = c.ParachainNodes[0][0].HostName()
-
 	} else {
 		parachainHostName = c.RelayChainNodes[0].HostName()
 	}
@@ -554,7 +553,6 @@ func (c *PolkadotChain) GetRPCAddress() string {
 	parachainUrl := fmt.Sprintf("http://%s:%s", parachainHostName, port)
 	relaychainUrl := fmt.Sprintf("http://%s:%s", relaychainHostName, port)
 	return fmt.Sprintf("%s,%s", parachainUrl, relaychainUrl)
-
 }
 
 // GetGRPCAddress retrieves the grpc address that can be reached by other containers in the docker network.

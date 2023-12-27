@@ -3,7 +3,7 @@ package types
 import (
 	"encoding/json"
 
-	//grpc "github.com/cosmos/gogoproto/grpc"
+
 	"github.com/grpc-ecosystem/grpc-gateway/runtime"
 	"github.com/spf13/cobra"
 

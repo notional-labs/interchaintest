@@ -1075,7 +1075,6 @@ func (tn *ChainNode) StoreClientContract(ctx context.Context, keyName string, fi
 	codeHashByte32 := sha256.Sum256(content)
 	codeHash := hex.EncodeToString(codeHashByte32[:])
 
-
 	return codeHash, nil
 }
 
