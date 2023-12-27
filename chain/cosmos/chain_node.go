@@ -17,29 +17,31 @@ import (
 	"time"
 
 	"github.com/avast/retry-go/v4"
-	tmjson "github.com/cometbft/cometbft/libs/json"
-	"github.com/cometbft/cometbft/p2p"
-	rpcclient "github.com/cometbft/cometbft/rpc/client"
-	rpchttp "github.com/cometbft/cometbft/rpc/client/http"
-	coretypes "github.com/cometbft/cometbft/rpc/core/types"
-	libclient "github.com/cometbft/cometbft/rpc/jsonrpc/client"
+	volumetypes "github.com/docker/docker/api/types/volume"
+	dockerclient "github.com/docker/docker/client"
+	"github.com/docker/go-connections/nat"
+	"github.com/strangelove-ventures/interchaintest/v7/ibc"
+	"github.com/strangelove-ventures/interchaintest/v7/internal/blockdb"
+	"github.com/strangelove-ventures/interchaintest/v7/internal/dockerutil"
+	"github.com/strangelove-ventures/interchaintest/v7/testutil"
+	"go.uber.org/zap"
+	"golang.org/x/sync/errgroup"
+
 	"github.com/cosmos/cosmos-sdk/client"
 	"github.com/cosmos/cosmos-sdk/crypto/keyring"
 	"github.com/cosmos/cosmos-sdk/types"
 	authTx "github.com/cosmos/cosmos-sdk/x/auth/tx"
 	paramsutils "github.com/cosmos/cosmos-sdk/x/params/client/utils"
 	stakingtypes "github.com/cosmos/cosmos-sdk/x/staking/types"
-	volumetypes "github.com/docker/docker/api/types/volume"
-	dockerclient "github.com/docker/docker/client"
-	"github.com/docker/go-connections/nat"
-	"go.uber.org/zap"
-	"golang.org/x/sync/errgroup"
+
+	tmjson "github.com/cometbft/cometbft/libs/json"
+	"github.com/cometbft/cometbft/p2p"
+	rpcclient "github.com/cometbft/cometbft/rpc/client"
+	rpchttp "github.com/cometbft/cometbft/rpc/client/http"
+	coretypes "github.com/cometbft/cometbft/rpc/core/types"
+	libclient "github.com/cometbft/cometbft/rpc/jsonrpc/client"
 
 	ccvclient "github.com/cosmos/interchain-security/v3/x/ccv/provider/client"
-	"github.com/strangelove-ventures/interchaintest/v7/ibc"
-	"github.com/strangelove-ventures/interchaintest/v7/internal/blockdb"
-	"github.com/strangelove-ventures/interchaintest/v7/internal/dockerutil"
-	"github.com/strangelove-ventures/interchaintest/v7/testutil"
 )
 
 // ChainNode represents a node in the test network that is being created
@@ -100,15 +102,13 @@ const (
 	privValPort = "1234/tcp"
 )
 
-var (
-	sentryPorts = nat.PortSet{
-		nat.Port(p2pPort):     {},
-		nat.Port(rpcPort):     {},
-		nat.Port(grpcPort):    {},
-		nat.Port(apiPort):     {},
-		nat.Port(privValPort): {},
-	}
-)
+var sentryPorts = nat.PortSet{
+	nat.Port(p2pPort):     {},
+	nat.Port(rpcPort):     {},
+	nat.Port(grpcPort):    {},
+	nat.Port(apiPort):     {},
+	nat.Port(privValPort): {},
+}
 
 // NewClient creates and assigns a new Tendermint RPC client to the ChainNode
 func (tn *ChainNode) NewClient(addr string) error {
@@ -485,7 +485,7 @@ func (tn *ChainNode) FindTxs(ctx context.Context, height uint64) ([]blockdb.Tx, 
 // with the chain node binary.
 func (tn *ChainNode) TxCommand(keyName string, command ...string) []string {
 	command = append([]string{"tx"}, command...)
-	var gasPriceFound, gasAdjustmentFound, feesFound = false, false, false
+	gasPriceFound, gasAdjustmentFound, feesFound := false, false, false
 	for i := 0; i < len(command); i++ {
 		if command[i] == "--gas-prices" {
 			gasPriceFound = true
@@ -1075,7 +1075,7 @@ func (tn *ChainNode) StoreClientContract(ctx context.Context, keyName string, fi
 	codeHashByte32 := sha256.Sum256(content)
 	codeHash := hex.EncodeToString(codeHashByte32[:])
 
-	//return stdout, nil
+
 	return codeHash, nil
 }
 
@@ -1475,7 +1475,8 @@ func (tn *ChainNode) NodeID(ctx context.Context) (string, error) {
 // KeyBech32 retrieves the named key's address in bech32 format from the node.
 // bech is the bech32 prefix (acc|val|cons). If empty, defaults to the account key (same as "acc").
 func (tn *ChainNode) KeyBech32(ctx context.Context, name string, bech string) (string, error) {
-	command := []string{tn.Chain.Config().Bin, "keys", "show", "--address", name,
+	command := []string{
+		tn.Chain.Config().Bin, "keys", "show", "--address", name,
 		"--home", tn.HomeDir(),
 		"--keyring-backend", keyring.BackendTest,
 	}

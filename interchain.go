@@ -4,13 +4,14 @@ import (
 	"context"
 	"fmt"
 
-	"cosmossdk.io/math"
 	"github.com/docker/docker/client"
 	"github.com/strangelove-ventures/interchaintest/v7/chain/cosmos"
 	"github.com/strangelove-ventures/interchaintest/v7/ibc"
 	"github.com/strangelove-ventures/interchaintest/v7/testreporter"
 	"go.uber.org/zap"
 	"golang.org/x/sync/errgroup"
+
+	"cosmossdk.io/math"
 )
 
 // Interchain represents a full IBC network, encompassing a collection of
@@ -323,7 +324,6 @@ func (ic *Interchain) Build(ctx context.Context, rep *testreporter.RelayerExecRe
 	}
 
 	walletAmounts, err := ic.genesisWalletAmounts(ctx)
-
 	if err != nil {
 		// Error already wrapped with appropriate detail.
 		return err

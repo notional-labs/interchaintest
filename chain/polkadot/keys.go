@@ -5,10 +5,9 @@ import (
 	"encoding/hex"
 	"fmt"
 
-	"github.com/decred/dcrd/dcrec/secp256k1/v2"
-
 	schnorrkel "github.com/ChainSafe/go-schnorrkel/1"
 	"github.com/StirlingMarketingGroup/go-namecase"
+	"github.com/decred/dcrd/dcrec/secp256k1/v2"
 	p2pCrypto "github.com/libp2p/go-libp2p/core/crypto"
 	"golang.org/x/crypto/blake2b"
 )

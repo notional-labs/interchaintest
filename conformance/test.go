@@ -35,7 +35,6 @@ import (
 	"testing"
 	"time"
 
-	"cosmossdk.io/math"
 	transfertypes "github.com/cosmos/ibc-go/v7/modules/apps/transfer/types"
 	"github.com/docker/docker/client"
 	"github.com/strangelove-ventures/interchaintest/v7"
@@ -47,6 +46,8 @@ import (
 	"github.com/strangelove-ventures/interchaintest/v7/testutil"
 	"github.com/stretchr/testify/require"
 	"golang.org/x/sync/errgroup"
+
+	"cosmossdk.io/math"
 )
 
 var (
@@ -465,7 +466,7 @@ func testPacketRelaySuccess(
 		req.True(srcFinalBalance.Equal(srcInitialBalance.Add(testCoinAmount)))
 		req.True(dstFinalBalance.Equal(dstInitialBalance.Sub(expectedDifference)))
 	}
-	//[END] assert on destination to source transfer
+	// [END] assert on destination to source transfer
 }
 
 // Ensure that a queued packet that should not be relayed is not relayed.

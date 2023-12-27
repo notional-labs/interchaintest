@@ -8,9 +8,7 @@ import (
 	"path/filepath"
 	"strings"
 
-	"cosmossdk.io/math"
 	"github.com/avast/retry-go/v4"
-	sdktypes "github.com/cosmos/cosmos-sdk/types"
 	"github.com/docker/docker/client"
 	"github.com/icza/dyno"
 	p2pcrypto "github.com/libp2p/go-libp2p/core/crypto"
@@ -19,6 +17,10 @@ import (
 	"github.com/strangelove-ventures/interchaintest/v7/ibc"
 	"github.com/strangelove-ventures/interchaintest/v7/internal/dockerutil"
 	"go.uber.org/zap"
+
+	"cosmossdk.io/math"
+
+	sdktypes "github.com/cosmos/cosmos-sdk/types"
 )
 
 // Increase parachain wallet amount due to their additional precision

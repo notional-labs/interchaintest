@@ -15,29 +15,11 @@ import (
 	"sync"
 	"time"
 
-	sdkmath "cosmossdk.io/math"
-	abcitypes "github.com/cometbft/cometbft/abci/types"
-	"github.com/cometbft/cometbft/proto/tendermint/crypto"
-	"github.com/cosmos/cosmos-sdk/codec"
-	codectypes "github.com/cosmos/cosmos-sdk/codec/types"
-	cryptocodec "github.com/cosmos/cosmos-sdk/crypto/codec"
-	"github.com/cosmos/cosmos-sdk/crypto/hd"
-	"github.com/cosmos/cosmos-sdk/crypto/keyring"
-	"github.com/cosmos/cosmos-sdk/types"
-	authtypes "github.com/cosmos/cosmos-sdk/x/auth/types"
-	bankTypes "github.com/cosmos/cosmos-sdk/x/bank/types"
-	govtypes "github.com/cosmos/cosmos-sdk/x/gov/types"
-	paramsutils "github.com/cosmos/cosmos-sdk/x/params/client/utils"
-	slashingtypes "github.com/cosmos/cosmos-sdk/x/slashing/types"
-	stakingtypes "github.com/cosmos/cosmos-sdk/x/staking/types"
 	cosmosproto "github.com/cosmos/gogoproto/proto"
 	clienttypes "github.com/cosmos/ibc-go/v7/modules/core/02-client/types"
 	chanTypes "github.com/cosmos/ibc-go/v7/modules/core/04-channel/types"
 	commitmenttypes "github.com/cosmos/ibc-go/v7/modules/core/23-commitment/types"
 	ibctmtypes "github.com/cosmos/ibc-go/v7/modules/light-clients/07-tendermint"
-	ccvconsumertypes "github.com/cosmos/interchain-security/v3/x/ccv/consumer/types"
-	ccvclient "github.com/cosmos/interchain-security/v3/x/ccv/provider/client"
-	ccvprovidertypes "github.com/cosmos/interchain-security/v3/x/ccv/provider/types"
 	dockertypes "github.com/docker/docker/api/types"
 	volumetypes "github.com/docker/docker/api/types/volume"
 	"github.com/docker/docker/client"
@@ -52,6 +34,28 @@ import (
 	"golang.org/x/sync/errgroup"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
+
+	sdkmath "cosmossdk.io/math"
+
+	"github.com/cosmos/cosmos-sdk/codec"
+	codectypes "github.com/cosmos/cosmos-sdk/codec/types"
+	cryptocodec "github.com/cosmos/cosmos-sdk/crypto/codec"
+	"github.com/cosmos/cosmos-sdk/crypto/hd"
+	"github.com/cosmos/cosmos-sdk/crypto/keyring"
+	"github.com/cosmos/cosmos-sdk/types"
+	authtypes "github.com/cosmos/cosmos-sdk/x/auth/types"
+	bankTypes "github.com/cosmos/cosmos-sdk/x/bank/types"
+	govtypes "github.com/cosmos/cosmos-sdk/x/gov/types"
+	paramsutils "github.com/cosmos/cosmos-sdk/x/params/client/utils"
+	slashingtypes "github.com/cosmos/cosmos-sdk/x/slashing/types"
+	stakingtypes "github.com/cosmos/cosmos-sdk/x/staking/types"
+
+	abcitypes "github.com/cometbft/cometbft/abci/types"
+	"github.com/cometbft/cometbft/proto/tendermint/crypto"
+
+	ccvconsumertypes "github.com/cosmos/interchain-security/v3/x/ccv/consumer/types"
+	ccvclient "github.com/cosmos/interchain-security/v3/x/ccv/provider/client"
+	ccvprovidertypes "github.com/cosmos/interchain-security/v3/x/ccv/provider/types"
 )
 
 var (
@@ -86,7 +90,8 @@ func NewCosmosHeighlinerChainConfig(name string,
 	gasPrices string,
 	gasAdjustment float64,
 	trustingPeriod string,
-	noHostMount bool) ibc.ChainConfig {
+	noHostMount bool,
+) ibc.ChainConfig {
 	return ibc.ChainConfig{
 		Type:           "cosmos",
 		Name:           name,
@@ -592,7 +597,6 @@ func (c *CosmosChain) QuerySigningInfos(ctx context.Context) ([]slashingtypes.Va
 
 	queryClient := slashingtypes.NewQueryClient(conn)
 	res, err := queryClient.SigningInfos(ctx, &params)
-
 	if err != nil {
 		return nil, err
 	}
@@ -612,7 +616,6 @@ func (c *CosmosChain) QueryValidators(ctx context.Context) ([]stakingtypes.Valid
 
 	queryClient := stakingtypes.NewQueryClient(conn)
 	res, err := queryClient.Validators(ctx, &params)
-
 	if err != nil {
 		return nil, err
 	}
@@ -632,7 +635,6 @@ func (c *CosmosChain) QuerySlashingParams(ctx context.Context) (slashingtypes.Qu
 
 	queryClient := slashingtypes.NewQueryClient(conn)
 	res, err := queryClient.Params(ctx, &params)
-
 	if err != nil {
 		return slashingtypes.QueryParamsResponse{}, err
 	}
@@ -653,7 +655,6 @@ func (c *CosmosChain) GetBalance(ctx context.Context, address string, denom stri
 
 	queryClient := bankTypes.NewQueryClient(conn)
 	res, err := queryClient.Balance(ctx, params)
-
 	if err != nil {
 		return sdkmath.Int{}, err
 	}
@@ -673,7 +674,6 @@ func (c *CosmosChain) AllBalances(ctx context.Context, address string) (types.Co
 
 	queryClient := bankTypes.NewQueryClient(conn)
 	res, err := queryClient.AllBalances(ctx, &params)
-
 	if err != nil {
 		return nil, err
 	}
@@ -1080,7 +1080,7 @@ func (c *CosmosChain) Start(testName string, ctx context.Context, additionalGene
 			zap.String("chain", exportGenesisChain),
 			zap.String("path", exportGenesis),
 		)
-		_ = os.WriteFile(exportGenesis, genbz, 0600)
+		_ = os.WriteFile(exportGenesis, genbz, 0o600)
 	}
 
 	chainNodes := c.Nodes()
@@ -1413,7 +1413,7 @@ func (c *CosmosChain) StartConsumer(testName string, ctx context.Context, additi
 			zap.String("chain", exportGenesisChain),
 			zap.String("path", exportGenesis),
 		)
-		_ = os.WriteFile(exportGenesis, genbz, 0600)
+		_ = os.WriteFile(exportGenesis, genbz, 0o600)
 	}
 
 	chainNodes := c.Nodes()
